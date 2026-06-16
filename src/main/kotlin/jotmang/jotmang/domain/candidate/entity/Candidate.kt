@@ -29,7 +29,4 @@ class Candidate(
 
     @Column(nullable = false)
     val createdAt: LocalDateTime = LocalDateTime.now(),
-
-    @Column(nullable = false)
-    var updatedAt: LocalDateTime = LocalDateTime.now()
 )
