@@ -25,16 +25,14 @@ data class VoteResponse(
 data class VoterResponse(
     val id: Long,
     val username: String,
-    val name: String,
-    val role: String
+    val name: String
 ) {
     companion object {
         fun from(user: User): VoterResponse =
             VoterResponse(
                 id = user.id,
                 username = user.username,
-                name = user.name,
-                role = user.role
+                name = user.name
             )
     }
 }

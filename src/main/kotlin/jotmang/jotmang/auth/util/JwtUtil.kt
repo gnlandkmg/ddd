@@ -16,12 +16,11 @@ class JwtUtil(
         Keys.hmacShaKeyFor(secret.toByteArray(StandardCharsets.UTF_8))
     }
 
-    fun generateToken(userId: Long, username: String, name: String, role: String): String =
+    fun generateToken(userId: Long, username: String, name: String): String =
         Jwts.builder()
             .subject(userId.toString())
             .claim("username", username)
             .claim("name", name)
-            .claim("role", role)
             .issuedAt(Date())
             .expiration(Date(System.currentTimeMillis() + expiration))
             .signWith(key)

@@ -2,12 +2,15 @@ package jotmang.jotmang.auth.controller
 
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletResponse
+import jotmang.jotmang.auth.dto.LoginRequest
 import jotmang.jotmang.auth.dto.LoginResponse
+import jotmang.jotmang.auth.dto.SignUpRequest
 import jotmang.jotmang.auth.service.AuthService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -15,27 +18,24 @@ import org.springframework.web.bind.annotation.RestController
 class AuthController(
     private val authService: AuthService
 ) {
-    @GetMapping("/login")
-    fun login(): ResponseEntity<Void> {
-        val url = authService.generateDAuthUrl()
-        return ResponseEntity.status(302)
-            .header("Location", url)
-            .build()
+    @PostMapping("/signup")
+    fun signUp(@RequestBody request: SignUpRequest): ResponseEntity<Void> {
+        authService.signUp(request)
+        return ResponseEntity.status(HttpStatus.CREATED).build()
     }
 
-    @GetMapping("/veify")
-    fun callback(
-        @RequestParam code: String,
-        @RequestParam state: String,
+    @PostMapping("/login")
+    fun login(
+        @RequestBody request: LoginRequest,
         response: HttpServletResponse
     ): ResponseEntity<LoginResponse> {
-        val loginResponse = authService.handleCallback(code, state)
+        val loginResponse = authService.login(request)
 
         Cookie("accessToken", loginResponse.accessToken).apply {
             isHttpOnly = true
-            secure = false   // HTTPS 환경에서는 true로 변경
+            secure = false
             path = "/"
-            maxAge = 86400   // 24시간 (초 단위)
+            maxAge = 86400
         }.also { response.addCookie(it) }
 
         return ResponseEntity.ok(loginResponse)

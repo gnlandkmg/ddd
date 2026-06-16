@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class JotmangApplication
 
 fun main(args: Array<String>) {
-	runApplication<JotmangApplication>(*args)
+    runApplication<JotmangApplication>(*args)
 }
