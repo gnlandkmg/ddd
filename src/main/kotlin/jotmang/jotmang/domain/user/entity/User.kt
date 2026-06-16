@@ -11,16 +11,13 @@ class User(
     val id: Long = 0,
 
     @Column(unique = true, nullable = false)
-    val publicId: String,
-
-    @Column(nullable = false)
     var username: String,
 
     @Column(nullable = false)
-    var name: String,
+    var password: String,
 
     @Column(nullable = false)
-    var role: String,
+    var name: String,
 
     @Column(nullable = false)
     val createdAt: LocalDateTime = LocalDateTime.now(),
